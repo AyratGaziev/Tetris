@@ -1,0 +1,21 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.wrapper {
+    width: 400px;
+    height: 600px;
+    border: 2px solid #264653;
+    margin: 0 auto;
+    box-sizing: content-box;
+}
+.row {
+    display: flex;
+}
+.box {
+    width: 40px;
+    height: 40px;
+    background-color: black;
+    border: 1px solid#264653;
+}
