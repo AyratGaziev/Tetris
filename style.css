@@ -2,13 +2,27 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "MuseoModerno", cursive;
+}
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.container {
+    display: flex;
+    margin: 0 auto;
+    justify-content: center;
 }
 .wrapper {
     width: 400px;
     height: 600px;
     border: 2px solid #264653;
-    margin: 0 auto;
+
     box-sizing: content-box;
+    position: relative;
 }
 .row {
     display: flex;
@@ -18,4 +32,46 @@
     height: 40px;
     background-color: black;
     border: 1px solid#264653;
+}
+.start {
+    position: absolute;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 240px;
+    border: 2px solid #fb5607;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    background-color: #ffff;
+}
+.start__img {
+    width: 236px;
+    display: block;
+    margin: 0 auto;
+    padding: 20px 40px;
+}
+.start__title-wrapper {
+    display: flex;
+}
+.start__title {
+    font-weight: 700;
+    font-size: 24px;
+    margin-bottom: 25px;
+}
+.start__btn {
+    width: 35px;
+    height: 35px;
+    background-image: url("./img/play.png");
+    background-size: 35px 35px;
+    margin-left: 5px;
+}
+.score {
+    margin-left: 20px;
+    margin-top: 20px;
+    display: none;
 }

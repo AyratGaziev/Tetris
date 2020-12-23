@@ -64,6 +64,7 @@ class Block {
         this.colors = ["#ffbe0b", "#fb5607", "#ff006e", "#8338ec", "#3a86ff"];
         this.doneBlocks = [];
         this.blockType = null;
+        this.score = 0;
     }
     checkBorder(border, idStep) {
         return this.block.some((id) => {
@@ -90,6 +91,8 @@ class Block {
                     });
                 })
             ) {
+                this.score += 10;
+                $(".score__now").text(`SCORE: ${this.score}`);
                 this.doneBlocks = this.doneBlocks.filter((dBlock) => {
                     return row.every((col) => {
                         return +col.attr("id") !== dBlock;
@@ -152,11 +155,8 @@ class Block {
     rotate() {
         switch (this.blockType) {
             case 0:
-                console.log(0);
                 break;
             case 1:
-                console.log(1);
-                console.log("this.turnCounter", this.turnCounter);
                 if (this.turnCounter === 0) {
                     this.block = [
                         this.block[0] + 20,
@@ -176,7 +176,6 @@ class Block {
                 }
                 break;
             case 2:
-                console.log(2);
                 if (this.turnCounter === 0) {
                     this.block = [
                         this.block[0] + 20,
@@ -212,7 +211,6 @@ class Block {
                 }
                 break;
             case 3:
-                console.log(3);
                 if (this.turnCounter === 0) {
                     this.block = [
                         this.block[0] + 11,
@@ -244,7 +242,6 @@ class Block {
             this.color = this.colors[randomColorIdx];
             this.block = this.blockTypes[randomBlockIdx];
             this.blockType = randomBlockIdx;
-            console.log(this.blockType);
             this.block.forEach((id) => {
                 $(`#${id}`).css("background-color", `${this.color}`);
             });
@@ -273,9 +270,30 @@ class Game {
         this.block = new Block();
         this.startTime = null;
         this.gameSpeed = 250;
+        this.started = false;
+
+        this.highScore = 0;
+    }
+    startBtn() {
+        $(document).keydown((e) => {
+            if (this.started) return;
+            if (e.key === "Enter") {
+                this.startGame();
+                this.started = true;
+            }
+        });
+        $(".start__btn").on("click", () => {
+            if (this.started) return;
+            this.startGame();
+            this.started = true;
+        });
     }
 
     startGame() {
+        $(".start").css("display", "none");
+        $(".score").css("display", "block");
+
+        $(".score__high").text(`HIGH SCORE: ${this.highScore}`);
         this.grid.createGrid(wrapper);
         this.block.createBlock(
             this.grid.left,
@@ -304,6 +322,7 @@ class Game {
 }
 
 const game = new Game(Grid, rowCount, colCount, Block);
-game.startGame();
+game.startBtn();
+
 console.log(game.grid);
 console.log(game);

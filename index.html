@@ -3,11 +3,34 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
         <link rel="stylesheet" href="./style.css" />
         <title>Tetris</title>
     </head>
     <body>
-        <div class="wrapper"></div>
+        <div class="container">
+            <div class="wrapper">
+                <div class="start">
+                    <img
+                        class="start__img"
+                        src="./img/tetris.png"
+                        alt="tetris"
+                    />
+                    <div class="start__title-wrapper">
+                        <div class="start__title">Tetris</div>
+                        <button class="start__btn"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="score">
+                <div class="score__now">SCORE: 0</div>
+                <div class="score__high">HIGH SCORE:</div>
+            </div>
+        </div>
 
         <script src="./jquery-3.5.1.min.js"></script>
         <script src="./script.js"></script>
