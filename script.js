@@ -64,7 +64,6 @@ class Block {
         this.colors = ["#ffbe0b", "#fb5607", "#ff006e", "#8338ec", "#3a86ff"];
         this.doneBlocks = [];
         this.blockType = null;
-        this.score = 0;
     }
     checkBorder(border, idStep) {
         return this.block.some((id) => {
@@ -82,7 +81,7 @@ class Block {
             });
         });
     }
-    checkFullRow(rows) {
+    checkFullRow(rows, game) {
         rows.forEach((row) => {
             if (
                 row.every((col) => {
@@ -91,8 +90,8 @@ class Block {
                     });
                 })
             ) {
-                this.score += 10;
-                $(".score__now").text(`SCORE: ${this.score}`);
+                game.score += 10;
+                $(".score__now").text(`SCORE: ${game.score}`);
                 this.doneBlocks = this.doneBlocks.filter((dBlock) => {
                     return row.every((col) => {
                         return +col.attr("id") !== dBlock;
@@ -106,7 +105,7 @@ class Block {
             }
         });
     }
-    moveDown(bottom, grid) {
+    moveDown(bottom, grid, game) {
         if (!this.block) return;
 
         const gameOver = () => {
@@ -116,13 +115,25 @@ class Block {
         };
 
         if (gameOver()) {
-            alert("GameOver");
+            game.gameOver = true;
+            if (+localStorage.getItem("highScore") < game.score) {
+                localStorage.setItem("highScore", game.score);
+            }
+            console.log("game over", game.score, game.highScore);
+            $(".end__score").text(`SCORE: ${game.score}`);
+            $(".end__high").text(`HIGH SCORE: ${game.highScore}`);
+            $(".end").css("display", "flex");
+            $(".end__replay").on("click", (e) => {
+                game.restartGame();
+            });
+
+            return;
         }
 
         if (this.checkBorder(this.doneBlocks, 10) || this.checkBorder(bottom)) {
             this.listeners.forEach((listener) => listener.unbind());
             this.doneBlocks = this.doneBlocks.concat(this.block);
-            this.checkFullRow(grid.rows);
+            this.checkFullRow(grid.rows, game);
             this.block = null;
 
             return;
@@ -152,7 +163,10 @@ class Block {
 
         this.block = this.block.map((id) => (id += 1));
     }
-    rotate() {
+    rotate(bottom) {
+        if (this.checkBorder(bottom) || this.checkCorner()) {
+            return;
+        }
         switch (this.blockType) {
             case 0:
                 break;
@@ -231,7 +245,10 @@ class Block {
                 break;
         }
     }
-    createBlock(left, right, bottom) {
+    increaseSpeed(game, increase) {
+        game.gameSpeed = increase ? 50 : 250;
+    }
+    createBlock(left, right, bottom, game) {
         if (!this.block) {
             this.turnCounter = 0;
             function randomSelect(elements) {
@@ -252,7 +269,14 @@ class Block {
                     } else if (event.key === "ArrowRight") {
                         this.moveRight(right, bottom);
                     } else if (event.key === "ArrowUp") {
-                        this.rotate();
+                        this.rotate(bottom);
+                    } else if (event.key === "ArrowDown") {
+                        this.increaseSpeed(game, true);
+                    }
+                }),
+                $(document).keyup((event) => {
+                    if (event.key === "ArrowDown") {
+                        this.increaseSpeed(game, false);
                     }
                 })
             ];
@@ -271,10 +295,19 @@ class Game {
         this.startTime = null;
         this.gameSpeed = 250;
         this.started = false;
-
-        this.highScore = 0;
+        this.gameOver = false;
+        this.score = 0;
+    }
+    restartGame() {
+        $(".end").css("display", "none");
+        this.block.doneBlocks = [];
+        this.gameOver = false;
+        this.highScore = localStorage.getItem("highScore") || 0;
+        this.score = 0;
+        this.startGame();
     }
     startBtn() {
+        this.grid.createGrid(wrapper);
         $(document).keydown((e) => {
             if (this.started) return;
             if (e.key === "Enter") {
@@ -290,28 +323,34 @@ class Game {
     }
 
     startGame() {
+        this.highScore = localStorage.getItem("highScore") || 0;
         $(".start").css("display", "none");
         $(".score").css("display", "block");
-
         $(".score__high").text(`HIGH SCORE: ${this.highScore}`);
-        this.grid.createGrid(wrapper);
+        $(".score__now").text(`SCORE: 0`);
+
         this.block.createBlock(
             this.grid.left,
             this.grid.right,
-            this.grid.bottom
+            this.grid.bottom,
+            this
         );
 
         const run = (timeStamp) => {
+            if (this.gameOver) {
+                return;
+            }
             if (!this.startTime) this.startTime = timeStamp;
             let progress = timeStamp - this.startTime;
             if (progress > this.gameSpeed) {
                 this.startTime = timeStamp;
-                this.block.moveDown(this.grid.bottom, this.grid);
+                this.block.moveDown(this.grid.bottom, this.grid, this);
                 this.grid.clearGrid(this.block.doneBlocks);
                 this.block.createBlock(
                     this.grid.left,
                     this.grid.right,
-                    this.grid.bottom
+                    this.grid.bottom,
+                    this
                 );
             }
             requestAnimationFrame(run);
@@ -321,7 +360,7 @@ class Game {
     }
 }
 
-const game = new Game(Grid, rowCount, colCount, Block);
+let game = new Game(Grid, rowCount, colCount, Block);
 game.startBtn();
 
 console.log(game.grid);

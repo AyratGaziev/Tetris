@@ -3,12 +3,22 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "MuseoModerno", cursive;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 button {
     border: none;
     background: none;
     cursor: pointer;
     outline: none;
+    width: 45px;
+    height: 45px;
+    background-size: 45px 45px;
 }
 
 .container {
@@ -20,7 +30,6 @@ button {
     width: 400px;
     height: 600px;
     border: 2px solid #264653;
-
     box-sizing: content-box;
     position: relative;
 }
@@ -64,14 +73,43 @@ button {
     margin-bottom: 25px;
 }
 .start__btn {
-    width: 35px;
-    height: 35px;
     background-image: url("./img/play.png");
-    background-size: 35px 35px;
-    margin-left: 5px;
+    margin-left: 10px;
 }
 .score {
     margin-left: 20px;
     margin-top: 20px;
     display: none;
+}
+.end {
+    position: absolute;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 240px;
+    background-color: rgba(95, 42, 165, 0.747);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0 auto;
+    padding: 5px 0;
+
+    display: none;
+}
+.end__score,
+.end__high {
+    margin-top: 15px;
+    color: #fff;
+}
+
+.end__replay {
+    margin: 15px 0;
+    background-image: url("./img/replay.png");
+}
+.end__replay:hover,
+.start__btn:hover {
+    transform: scaleX(1.2) scaleY(1.2);
 }
