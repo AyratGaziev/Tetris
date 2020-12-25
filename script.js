@@ -1,6 +1,9 @@
 const wrapper = $(".wrapper");
 const rowCount = 15;
 const colCount = 10;
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+);
 
 class Grid {
     constructor(rowCount, colCount) {
@@ -135,6 +138,7 @@ class Block {
             this.doneBlocks = this.doneBlocks.concat(this.block);
             this.checkFullRow(grid.rows, game);
             this.block = null;
+            game.gameSpeed = 250;
 
             return;
         }
@@ -262,23 +266,40 @@ class Block {
             this.block.forEach((id) => {
                 $(`#${id}`).css("background-color", `${this.color}`);
             });
+            const moveHandler = (event) => {
+                event.preventDefault();
+                if (
+                    event.key === "ArrowLeft" ||
+                    $(event.target).attr("class") === "arrow__left"
+                ) {
+                    this.moveLeft(left, bottom);
+                } else if (
+                    event.key === "ArrowRight" ||
+                    $(event.target).attr("class") === "arrow__right"
+                ) {
+                    this.moveRight(right, bottom);
+                } else if (
+                    event.key === "ArrowUp" ||
+                    $(event.target).attr("class") === "arrow__up"
+                ) {
+                    this.rotate(bottom);
+                } else if (
+                    event.key === "ArrowDown" ||
+                    $(event.target).attr("class") === "arrow__down"
+                ) {
+                    this.increaseSpeed(game, true);
+                }
+            };
+            const increaseRemoveHandler = (event) => {
+                if (event.key === "ArrowDown") {
+                    this.increaseSpeed(game, false);
+                }
+            };
             this.listeners = [
-                $(document).keydown((event) => {
-                    if (event.key === "ArrowLeft") {
-                        this.moveLeft(left, bottom);
-                    } else if (event.key === "ArrowRight") {
-                        this.moveRight(right, bottom);
-                    } else if (event.key === "ArrowUp") {
-                        this.rotate(bottom);
-                    } else if (event.key === "ArrowDown") {
-                        this.increaseSpeed(game, true);
-                    }
-                }),
-                $(document).keyup((event) => {
-                    if (event.key === "ArrowDown") {
-                        this.increaseSpeed(game, false);
-                    }
-                })
+                $(document).keydown(moveHandler),
+                $(document).keyup(increaseRemoveHandler),
+                $(".arrow").mousedown(moveHandler),
+                $(".arrow").mouseup(increaseRemoveHandler)
             ];
         } else {
             this.block.forEach((id) => {
@@ -308,6 +329,8 @@ class Game {
     }
     startBtn() {
         this.grid.createGrid(wrapper);
+        this.highScore = localStorage.getItem("highScore") || 0;
+        $(".score__high").text(`HIGH SCORE: ${this.highScore}`);
         $(document).keydown((e) => {
             if (this.started) return;
             if (e.key === "Enter") {
@@ -323,11 +346,12 @@ class Game {
     }
 
     startGame() {
-        this.highScore = localStorage.getItem("highScore") || 0;
         $(".start").css("display", "none");
         $(".score").css("display", "block");
-        $(".score__high").text(`HIGH SCORE: ${this.highScore}`);
         $(".score__now").text(`SCORE: 0`);
+        if (isMobile) {
+            $(".arrow").css("display", "flex");
+        }
 
         this.block.createBlock(
             this.grid.left,

@@ -49,14 +49,13 @@ button {
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
     width: 240px;
-    border: 2px solid #fb5607;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
-    background-color: #ffff;
+    background-color: rgba(255, 255, 255, 0.753);
 }
 .start__img {
     width: 236px;
@@ -76,10 +75,12 @@ button {
     background-image: url("./img/play.png");
     margin-left: 10px;
 }
+.right-wrapper {
+    position: relative;
+}
 .score {
     margin-left: 20px;
     margin-top: 20px;
-    display: none;
 }
 .end {
     position: absolute;
@@ -112,4 +113,84 @@ button {
 .end__replay:hover,
 .start__btn:hover {
     transform: scaleX(1.2) scaleY(1.2);
+}
+.arrow {
+    position: absolute;
+    bottom: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.arrow__up-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.arrow__down-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+.arrow__up {
+    background-image: url("./img/rotate.png");
+    transform: rotateZ(-90deg);
+}
+
+.arrow__left {
+    background-image: url("./img/arrow.png");
+    transform: rotateZ(-180deg);
+}
+
+.arrow__down {
+    background-image: url("./img/arrow.png");
+    transform: rotateZ(90deg);
+}
+
+.arrow__right {
+    background-image: url("./img/arrow.png");
+}
+
+@media (max-width: 425px) {
+    .wrapper {
+        width: 300px;
+        height: 450px;
+    }
+    .box {
+        width: 30px;
+        height: 30px;
+    }
+    .score {
+        margin-left: 2px;
+        font-size: 12px;
+    }
+    .arrow button {
+        width: 35px;
+        height: 35px;
+        background-size: 35px 35px;
+    }
+}
+@media (max-width: 375px) {
+    .score {
+        margin-left: 2px;
+    }
+    .score__high {
+        margin-top: 15px;
+    }
+}
+@media (max-width: 320px) {
+    .wrapper {
+        width: 250px;
+        height: 375px;
+    }
+    .box {
+        width: 25px;
+        height: 25px;
+    }
+    .arrow button {
+        width: 25px;
+        height: 25px;
+        background-size: 25px 25px;
+    }
 }
