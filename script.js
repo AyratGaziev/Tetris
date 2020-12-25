@@ -343,15 +343,15 @@ class Game {
             this.startGame();
             this.started = true;
         });
+        if (isMobile) {
+            $(".arrow").css("display", "flex");
+        }
     }
 
     startGame() {
         $(".start").css("display", "none");
         $(".score").css("display", "block");
         $(".score__now").text(`SCORE: 0`);
-        if (isMobile) {
-            $(".arrow").css("display", "flex");
-        }
 
         this.block.createBlock(
             this.grid.left,
