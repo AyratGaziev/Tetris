@@ -23,7 +23,6 @@ button {
 
 .container {
     display: flex;
-    margin: 0 auto;
     justify-content: center;
 }
 .wrapper {
@@ -114,13 +113,18 @@ button {
 .start__btn:hover {
     transform: scaleX(1.2) scaleY(1.2);
 }
+
 .arrow {
-    position: absolute;
-    bottom: 0;
     display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
+}
+.arrow button {
+    background-size: 75px 75px;
+    width: 75px;
+    height: 75px;
 }
 .arrow__up-wrapper {
     display: flex;
@@ -151,8 +155,27 @@ button {
 .arrow__right {
     background-image: url("./img/arrow.png");
 }
+.github {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.github__icon {
+    background-image: url("./img/github.png");
+    display: block;
+    width: 35px;
+    height: 35px;
+    background-size: 35px 35px;
+}
 
-@media (max-width: 425px) {
+@media (max-width: 768px) {
+    .arrow {
+        display: flex;
+    }
+}
+
+@media (max-width: 576px) {
     .wrapper {
         width: 300px;
         height: 450px;
@@ -166,12 +189,13 @@ button {
         font-size: 12px;
     }
     .arrow button {
-        width: 35px;
-        height: 35px;
-        background-size: 35px 35px;
+        width: 65px;
+        height: 65px;
+        background-size: 65px 65px;
     }
 }
-@media (max-width: 375px) {
+
+@media (max-width: 413px) {
     .wrapper {
         width: 250px;
         height: 375px;
@@ -184,12 +208,12 @@ button {
         margin-left: 5px;
     }
     .arrow button {
-        width: 25px;
-        height: 25px;
-        background-size: 25px 25px;
+        width: 55px;
+        height: 55px;
+        background-size: 55px 55px;
     }
 }
-@media (max-width: 320px) {
+@media (max-width: 360px) {
     .wrapper {
         width: 200px;
         height: 300px;

@@ -1,15 +1,13 @@
 const wrapper = $(".wrapper");
 const rowCount = 15;
 const colCount = 10;
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-);
+
 
 class Grid {
     constructor(rowCount, colCount) {
         this.rowCount = rowCount;
         this.colCount = colCount;
-        this.wrapper = this.rows = [];
+        this.rows = [];
         this.bottom = [];
         this.right = [];
         this.left = [];
@@ -343,9 +341,6 @@ class Game {
             this.startGame();
             this.started = true;
         });
-        if (isMobile) {
-            $(".arrow").css("display", "flex");
-        }
     }
 
     startGame() {
